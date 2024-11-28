@@ -54,7 +54,7 @@ const Navbar = () => {
           {pageLinks.map((link, index) => (
             <Link 
               key={index} 
-              href={`/${link}`} 
+              href={`/${link.toLowerCase()}`} 
               className={isActive(`/${link}`) ? styles.active : ''}>{link}</Link>
           ))}
         </nav>

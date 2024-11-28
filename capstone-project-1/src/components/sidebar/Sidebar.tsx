@@ -14,19 +14,10 @@ const Sidebar = () => {
     isSideBarExpanded ? (
     <aside className={styles.sidebar}>
       <nav className={styles['sidebar__links']}>
-        {/* <Link href="/home" className={isActive('/home') ? styles.active : ''}>Info</Link>
-        <Link href="/insert" className={isActive('/insert') ? styles.active : ''}>New</Link>
-        <Link href="/" className={isActive('/') ? styles.active : ''}>Open</Link>
-        <Link href="/" className={isActive('/') ? styles.active : ''}>Save</Link>
-        <Link href="/" className={isActive('/') ? styles.active : ''}>SaveAs</Link>
-        <Link href="/" className={isActive('/') ? styles.active : ''}>Print</Link>
-        <Link href="/" className={isActive('/') ? styles.active : ''}>Share</Link>
-        <Link href="/" className={isActive('/') ? styles.active : ''}>Export</Link>
-        <Link href="/" className={isActive('/') ? styles.active : ''}>Close</Link> */}
         {pageLinks.map((link, index) => (
           <Link 
             key={index} 
-            href={`/${link}`} 
+            href={`/${link.toLowerCase()}`} 
             className={isActive(`/${link}`) ? styles.active : ''}>{link}</Link>
         ))}
       </nav>
