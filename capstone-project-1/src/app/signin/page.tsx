@@ -36,7 +36,7 @@ const Signin = () => {
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
           const data = await response.json();
-          console.log('Registration successful:', data);
+          console.log('Registration successful: ', data);
           alert('Registration successful!');
           setFormData({
             name: '',
@@ -46,8 +46,7 @@ const Signin = () => {
           });
         } else {
           const text = await response.text();
-          console.log('Non-JSON response:', text);
-          alert('Registration response received but not in JSON format.');
+          console.log('Response: ', text);
         }
       } else {
         console.error('Registration failed:', response.statusText);
