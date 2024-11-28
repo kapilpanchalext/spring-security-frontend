@@ -1,0 +1,15 @@
+@mixin position {
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+@mixin link__fonts {
+  font-weight: 500;
+  font-size: larger;
+}
+
+@mixin schoolbell__font {
+  font-family: "Schoolbell", sans-serif;
+  font-weight: 400;
+}

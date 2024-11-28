@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "./globals.scss";
+import Navbar from "@/components/navbar/Navbar";
+import Sidebar from "@/components/sidebar/Sidebar";
+import NavigationProvider from "@/store/NavigationProvider";
+import ContextWrapper from "./ContextWrapper";
 
 export const metadata: Metadata = {
   title: "Capstone Project 1",
@@ -12,10 +16,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        {children}
-      </body>
-    </html>
+    <NavigationProvider>
+      <ContextWrapper>
+        <body>
+          <header>
+            <Navbar/>
+            <Sidebar/>
+            {children}
+          </header>
+        </body>
+      </ContextWrapper>
+    </NavigationProvider>
   );
 }

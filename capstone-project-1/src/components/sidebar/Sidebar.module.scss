@@ -1,0 +1,53 @@
+@use "../../styles/abstracts/vars" as *;
+@use "../../styles/abstracts/mixins" as *;
+
+@mixin sidebar__dimension {
+  height: #{$viewport-height};
+  width: #{$sidebar-width};
+  margin: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--background-tertiary);
+  background: var(--background-secondary);
+  z-index: #{$z-index-sidebar};
+}
+
+@mixin sidebar__items {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar {
+  @include sidebar__dimension();
+  @include sidebar__items();
+  @include schoolbell__font();
+  @include link__fonts();
+
+  .sidebar__links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+}
+
+.sidebar__links a {
+  color: var(--link-primary);
+}
+
+.sidebar__links a:hover {
+  color: var(--link-primary-hover);
+}
+
+.sidebar__links .active {
+  color: var(--link-primary-active);
+  font-size: x-large;
+}

@@ -1,0 +1,53 @@
+@use "sass:color";
+@use "../abstracts/vars" as *;
+
+@mixin light-theme {
+  --text-primary: #{$neutral-950};
+  --text-secondary: #{$neutral-900};
+  --link-primary: #{$primary-600};
+  --link-primary-hover: #{$primary-800};
+  --link-primary-active: #{$primary-800};
+  --background-primary: #{$neutral-50};
+  --background-secondary: white;
+  --background-tertiary: #{$neutral-200};
+  color-scheme: light;
+}
+
+@mixin dark-theme {
+  --text-primary: #{$neutral-50};
+  --text-secondary: #{$neutral-100};
+  --link-primary: #{$primary-400};
+  --link-primary-hover: #{$primary-200};
+  --link-primary-active: #{$primary-200};
+  --background-primary: #{$neutral-950};
+  --background-secondary: #{$neutral-900};
+  --background-tertiary: #{$neutral-800};
+  color-scheme: dark;
+}
+
+body,
+:root {
+  background: var(--background-primary);
+  color: var(--text-primary);
+  font-family: "Roboto", sans-serif;
+  width: 100vw;
+}
+
+.light {
+  @include light-theme;
+}
+
+.dark {
+  @include dark-theme;
+}
+
+// OS Default.
+:root:not(.light):not(.dark) {
+  @media (prefers-color-scheme: light) {
+    @include light-theme;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    @include dark-theme;
+  }
+}
