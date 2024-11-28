@@ -91,7 +91,7 @@ const Signin = () => {
           <div style={{ marginBottom: '15px' }}>
             <label htmlFor="mobileNumber">Mobile Number:</label>
             <input
-              type="text"
+              type="number"
               id="mobileNumber"
               name="mobileNumber"
               value={formData.mobileNumber}
@@ -101,11 +101,11 @@ const Signin = () => {
             />
           </div>
           <div style={{ marginBottom: '15px' }}>
-            <label htmlFor="pwd">Password:</label>
+            <label htmlFor="password">Password:</label>
             <input
               type="password"
-              id="pwd"
-              name="pwd"
+              id="password"
+              name="password"
               value={formData.password}
               onChange={handleChange}
               required

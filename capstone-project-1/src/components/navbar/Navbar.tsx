@@ -10,15 +10,16 @@ const Navbar = () => {
   const { isTheme, toggleTheme, toggleSidebar } = useContext(NavigationContext);
   const [ isNavbarExtended, setIsNavbarExtended ] = useState<boolean>(false);
   const { isActive } = useRouterPath();
+  const SCREEN_WIDTH = 769;
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 769 && isNavbarExtended) {
+      if (window.innerWidth > SCREEN_WIDTH && isNavbarExtended) {
         setIsNavbarExtended(false);
       }
     };
 
-    if (window.innerWidth > 769 && isNavbarExtended) {
+    if (window.innerWidth > SCREEN_WIDTH && isNavbarExtended) {
       setIsNavbarExtended(false);
     }
 
