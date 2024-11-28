@@ -4,11 +4,11 @@ import styles from "./Navbar.module.scss";
 import Link from 'next/link';
 import NavigationContext from '@/store/NavigationContext';
 import { useRouterPath } from '../hooks/useRouterPath';
+import pageLinks from "../pageLinks/PageLinks";
 
 const Navbar = () => {
   const { isTheme, toggleTheme, toggleSidebar } = useContext(NavigationContext);
   const [ isNavbarExtended, setIsNavbarExtended ] = useState<boolean>(false);
-
   const { isActive } = useRouterPath();
 
   useEffect(() => {
@@ -51,20 +51,18 @@ const Navbar = () => {
         </div>
         
         <nav className={styles['navbar__links']}>
-          <Link href="/home" className={isActive('/home') ? styles.active : ''}>Home</Link>
-          <Link href="/insert" className={isActive('/insert') ? styles.active : ''}>Insert</Link>
-          <Link href="/design" className={isActive('/design') ? styles.active : ''}>Design</Link>
-          <Link href="/layout" className={isActive('/layout') ? styles.active : ''}>Layout</Link>
-          <Link href="/references" className={isActive('/references') ? styles.active : ''}>References</Link>
-          <Link href="/mailings" className={isActive('/mailings') ? styles.active : ''}>Mailings</Link>
-          <Link href="/review" className={isActive('/review') ? styles.active : ''}>Review</Link>
-          <Link href="/view" className={isActive('/view') ? styles.active : ''}>View</Link>
+          {pageLinks.map((link, index) => (
+            <Link 
+              key={index} 
+              href={`/${link}`} 
+              className={isActive(`/${link}`) ? styles.active : ''}>{link}</Link>
+          ))}
         </nav>
         <button className={styles['theme-button']} onClick={toggleTheme}>{toggleIconHandler()}</button>
         <button className={`${styles['menu-button']}`} onClick={openLinksMenuHandler}><span className={`material-symbols-outlined`}>menu</span></button>
       </header>
     </>
   )
-}
+};
 
 export default Navbar;
