@@ -4,7 +4,7 @@ import LINKMAP from "@/components/model/backendapi/BackendApi";
 import RegisterModel from "@/components/model/RegisterModel";
 import { useState } from "react";
 
-const Signin = () => {
+const Register = () => {
 
   const [formData, setFormData] = useState<RegisterModel>({
     name: '',
@@ -49,11 +49,11 @@ const Signin = () => {
           console.log('Response: ', text);
         }
       } else {
-        console.error('Registration failed:', response.statusText);
+        console.error('Registration failed: ', response.statusText);
         alert('Registration failed. Please try again.');
       }
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error('Error during registration: ', error);
       alert('An error occurred. Please try again later.');
     }
   };
@@ -118,4 +118,4 @@ const Signin = () => {
   )
 };
 
-export default Signin;
+export default Register;
