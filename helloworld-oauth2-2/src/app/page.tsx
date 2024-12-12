@@ -11,10 +11,6 @@ export default function Home() {
   const [authorizationCode, setAuthorizationCode] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
 
-  const buttonClickHandler = () => {
-    alert("HelloWorld");
-  }
-
   const sendRequestToAuthServerHandler = async () => {
     console.log("Send Request To Auth Server Handler");
 
@@ -38,11 +34,10 @@ export default function Home() {
       url.searchParams.append(key, value);
     });
 
-    // alert("URL: " + url.toString());
     console.dir(url);
 
     window.addEventListener("beforeunload", () => {
-      console.log("Navigating to:", window.location.href);
+      console.log("Navigating to: ", window.location.href);
     });
 
     window.location.href = url.toString();
@@ -60,8 +55,8 @@ export default function Home() {
   
     if (code && stateReceived === stateSent) {
       // Authorization code received, now you can exchange it for an access token
-      console.log('Authorization code:', code);
-
+      console.log('Authorization code: ', code);
+      console.log("Verify State: ", stateReceived, " : ", stateSent);
       // You can proceed with exchanging the code for tokens
       setAuthorizationCode(code);
       alert("State Matched and Authorization Code: " + authorizationCode);
@@ -69,7 +64,7 @@ export default function Home() {
   };
 
   const accessTokenHandler = () => {  
-    console.log("Get Access Token Handler");
+    console.log("Get Access Token Handler: ");
     exchangeCodeForTokens(authorizationCode!);
   }
 
@@ -95,6 +90,7 @@ export default function Home() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          // 'Access-Control-Allow-Origin': 'http://localhost:3000',
         },
         body: new URLSearchParams({
           'grant_type': 'authorization_code',
@@ -130,7 +126,6 @@ export default function Home() {
     <>
       <h1>OAuth2.0 App</h1>
       <div>
-        <button onClick={buttonClickHandler}>Click</button>
         <button onClick={sendRequestToAuthServerHandler}><h1>Get Authorization Code</h1></button>
         <button onClick={verifyStateParameterHandler}><h1>Verify State Parameter</h1></button>
         <button onClick={accessTokenHandler}><h1>Get Access Token</h1></button>
