@@ -122,6 +122,38 @@ export default function Home() {
     }
   };
 
+  const preFlightRequestHandler = async () => {
+    console.log("Pre-Flight Request Handler: ");
+    try {
+      const baseURL = 'http://localhost:9001/api/v1/helloworld';
+
+      // Send the POST request
+      const response = await fetch(baseURL, {
+        method: 'GET',
+        headers: {
+          'X-Custom-Header': 'TriggerPreflight',
+        },
+      });
+
+      // Handle the response
+      if (response.ok) {
+        const data = await response.text();
+        if (data) {
+          alert("Received Response: " + data);
+        } else {
+          console.error('Error exchanging code:', data);
+        }
+      } else {
+        console.error('HTTP error:', response.status, response.statusText);
+        const errorData = await response.text();
+        console.error('Error details:', errorData);
+      }
+    } catch (error) {
+      console.error('Error during code exchange:', error);
+      alert("ERROR: " + error);
+    }
+  };
+
   return (
     <>
       <h1>OAuth2.0 App</h1>
@@ -129,6 +161,7 @@ export default function Home() {
         <button onClick={sendRequestToAuthServerHandler}><h1>Get Authorization Code</h1></button>
         <button onClick={verifyStateParameterHandler}><h1>Verify State Parameter</h1></button>
         <button onClick={accessTokenHandler}><h1>Get Access Token</h1></button>
+        <button onClick={preFlightRequestHandler}><h1>OPTIONS Pre-Flight Request</h1></button>
       </div>
     </>
   );
