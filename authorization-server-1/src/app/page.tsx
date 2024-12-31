@@ -39,6 +39,7 @@ export default function Home() {
     });
 
     window.location.href = url.toString();
+
   };
 
   const verifyStateParameterHandler = () => {
@@ -152,10 +153,91 @@ export default function Home() {
     }
   };
 
+  const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    // Create a new URLSearchParams instance
+    const formData = new FormData(event.currentTarget);
+    const urlEncodedData = new URLSearchParams();
+
+    // Convert FormData to URLSearchParams
+    formData.forEach((value, key) => {
+      urlEncodedData.append(key, value as string);
+    });
+
+    console.log(urlEncodedData.toString()); // Logs the URL-encoded data
+
+    // Send the form data to your backend using fetch or axios
+    // fetch('/submit', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    //     body: urlEncodedData.toString(),
+    // })
+    //     .then(response => response.json())
+    //     .then(data => console.log(data))
+    //     .catch(error => console.error('Error:', error));
+
+    console.log("Send Request To Auth Server Handler");
+
+    // Construct the base URL
+    const baseURL = 'http://localhost:8084/oauth2/authorize';
+
+    // Define query parameters
+    const queryParams = {
+      response_type: 'code',
+      client_id: 'capstone-project-auth-code-pkce-1',
+      redirect_uri: 'http://localhost:3000',
+      scope: 'openid email',
+      state: '4qFl3tTCkYb2R6pD',
+      code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+      code_challenge_method: 'S256'
+    };
+
+    // Use URLSearchParams to append parameters
+    const url = new URL(baseURL);
+    Object.entries(queryParams).forEach(([key, value]) => {
+      url.searchParams.append(key, value);
+    });
+
+    console.dir(url);
+
+    try {
+      // Send the fetch request
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${btoa('admin@email.com:1234')}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      // Process the response
+      const data = await response.json();
+      console.log("Response Data:", data);
+    } catch (error) {
+      console.error("Fetch Error:", error);
+    }
+  };
+
   return (
     <>
       <h1>OAuth2.0 App</h1>
       <div>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+          <br /><br />
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+          <br /><br />
+          <button type="submit">Login</button>
+        </form>
         <button onClick={sendRequestToAuthServerHandler}><h1>Get Authorization Code</h1></button>
         <button onClick={verifyStateParameterHandler}><h1>Verify State Parameter</h1></button>
         <button onClick={accessTokenHandler}><h1>Get Access Token</h1></button>
