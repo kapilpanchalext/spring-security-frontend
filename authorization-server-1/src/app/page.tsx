@@ -68,29 +68,20 @@ export default function Home() {
   }
 
   async function exchangeCodeForTokens(code: string) {
+    // alert(JSON.stringify(code));
     try {
-      // Send the authorization code to your backend or use it to get tokens
-      // const baseURL = 'http://localhost:9002/realms/application1_realm/protocol/openid-connect/token';
       const baseURL = 'http://localhost:8084/oauth2/token';
-      // Define query parameters
-      // const body = new URLSearchParams({
-      //     'grant_type': 'authorization_code',
-      //     'client_id': 'capstone-project-auth-code-pkce-1',
-      //     'redirect_uri': 'http://localhost:3000',
-      //     'code': code,
-      //     'code_verifier': '2m_do5z6EiZu5WFtXjTjxMwy47vxTB3i-fFLVGsnu2-PY9Y3'
-      //   });
 
       // Send the POST request
-      const controller = new AbortController();
-      setTimeout(() => controller.abort(), 3000000);
+      // const controller = new AbortController();
+      // setTimeout(() => controller.abort(), 3000000);
       const response = await fetch(baseURL, {
-        signal: controller.signal,
+        // signal: controller.signal,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+        // headers: {
+          // 'Content-Type': 'application/x-www-form-urlencoded',
           // 'Access-Control-Allow-Origin': 'http://localhost:3000',
-        },
+        // },
         body: new URLSearchParams({
           'grant_type': 'authorization_code',
           'client_id': 'capstone-project-auth-code-pkce-1',
@@ -113,38 +104,6 @@ export default function Home() {
       } else {
         console.error('HTTP error:', response.status, response.statusText);
         const errorData = await response.json();
-        console.error('Error details:', errorData);
-      }
-    } catch (error) {
-      console.error('Error during code exchange:', error);
-      alert("ERROR: " + error);
-    }
-  };
-
-  const preFlightRequestHandler = async () => {
-    console.log("Pre-Flight Request Handler: ");
-    try {
-      const baseURL = 'http://localhost:9001/api/v1/helloworld';
-
-      // Send the POST request
-      const response = await fetch(baseURL, {
-        method: 'GET',
-        headers: {
-          'X-Custom-Header': 'TriggerPreflight',
-        },
-      });
-
-      // Handle the response
-      if (response.ok) {
-        const data = await response.text();
-        if (data) {
-          alert("Received Response: " + data);
-        } else {
-          console.error('Error exchanging code:', data);
-        }
-      } else {
-        console.error('HTTP error:', response.status, response.statusText);
-        const errorData = await response.text();
         console.error('Error details:', errorData);
       }
     } catch (error) {
@@ -204,13 +163,11 @@ export default function Home() {
     console.dir(url);
 
     try {
-      // Send the fetch request
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${btoa('admin@email.com:1234')}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        }
+          'Content-Type': 'application/json',
+        },
       });
   
       if (!response.ok) {
@@ -241,7 +198,6 @@ export default function Home() {
         <button onClick={sendRequestToAuthServerHandler}><h1>Get Authorization Code</h1></button>
         <button onClick={verifyStateParameterHandler}><h1>Verify State Parameter</h1></button>
         <button onClick={accessTokenHandler}><h1>Get Access Token</h1></button>
-        <button onClick={preFlightRequestHandler}><h1>OPTIONS Pre-Flight Request</h1></button>
       </div>
     </>
   );
