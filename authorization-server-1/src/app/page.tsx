@@ -124,20 +124,7 @@ export default function Home() {
       urlEncodedData.append(key, value as string);
     });
 
-    console.log(urlEncodedData.toString()); // Logs the URL-encoded data
-
-    // Send the form data to your backend using fetch or axios
-    // fetch('/submit', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     body: urlEncodedData.toString(),
-    // })
-    //     .then(response => response.json())
-    //     .then(data => console.log(data))
-    //     .catch(error => console.error('Error:', error));
-
+    console.log(urlEncodedData.toString());
     console.log("Send Request To Auth Server Handler");
 
     // Construct the base URL
@@ -166,8 +153,14 @@ export default function Home() {
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
+          'Authorization': 'Basic YWRtaW5AZW1haWwuY29tOjEyMzQ',
           'Content-Type': 'application/json',
         },
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        return response;
       });
   
       if (!response.ok) {
@@ -175,8 +168,32 @@ export default function Home() {
       }
   
       // Process the response
-      const data = await response.json();
-      console.log("Response Data:", data);
+      console.log("Redirected to:", response.url);
+
+      // if (response.url) {
+      //   window.location.href = response.url;
+      // }
+
+        // If the server responds with a redirect URL for OAuth flow, fetch it programmatically
+      if (response.url) {
+        // const credentials = `${'admin@email.com'}:${'1234'}`;
+        // const base64Credentials = btoa(credentials);
+        const oauthResponse = await fetch(response.url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            username: 'admin@email.com',
+            password: '1234',
+          }),
+        });
+        if (!oauthResponse.ok) {
+          throw new Error(`OAuth Fetch Error: ${oauthResponse.statusText}`);
+        }
+        const data = await oauthResponse.text();
+        console.log("OAuth Response Data:", data);
+      }
     } catch (error) {
       console.error("Fetch Error:", error);
     }
