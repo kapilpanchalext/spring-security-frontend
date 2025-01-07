@@ -1,12 +1,12 @@
 "use client"
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const [authorizationCode, setAuthorizationCode] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
-  // const router = useRouter();
+  const router = useRouter();
 
   const sendRequestToAuthServerHandler = async () => {
     console.log("Send Request To Auth Server Handler");
@@ -38,7 +38,6 @@ export default function Home() {
     });
 
     window.location.href = url.toString();
-
   };
 
   const verifyStateParameterHandler = () => {
@@ -103,135 +102,34 @@ export default function Home() {
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // // Create a new URLSearchParams instance
-    // const formData = new FormData(event.currentTarget);
-    // const urlEncodedData = new URLSearchParams();
-
-    // // Convert FormData to URLSearchParams
-    // formData.forEach((value, key) => {
-    //   urlEncodedData.append(key, value as string);
-    // });
-
-    // console.log(urlEncodedData.toString());
-    // console.log("Send Request To Auth Server Handler");
-
-    // // Construct the base URL
-    // const baseURL = 'http://localhost:8084/oauth2/authorize';
-
-    // // Define query parameters
-    // const queryParams = {
-    //   response_type: 'code',
-    //   client_id: 'capstone-project-auth-code-pkce-1',
-    //   redirect_uri: 'http://localhost:3000',
-    //   scope: 'openid email',
-    //   state: '4qFl3tTCkYb2R6pD',
-    //   code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
-    //   code_challenge_method: 'S256'
-    // };
-
-    // // Use URLSearchParams to append parameters
-    // const url = new URL(baseURL);
-    // Object.entries(queryParams).forEach(([key, value]) => {
-    //   url.searchParams.append(key, value);
-    // });
-
-    // console.dir(url);
-    // try {
-    //   const response = await fetch(url.toString(), {
-    //     method: 'GET',
-    //     // headers: {
-    //     //   // 'Authorization': 'Basic YWRtaW5AZW1haWwuY29tOjEyMzQ',
-    //     //   // 'Content-Type': 'application/json',
-    //     // },
-    //   }).then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error(`Error: ${response.statusText}`);
-    //     }
-    //     return response;
-    //   });
-  
-    //   if (!response.ok) {
-    //     throw new Error(`Error: ${response.statusText}`);
-    //   }
-  
-    //   // Process the response
-    //   console.log("Redirected to:", response.url);
-
-    //   if (response.url) {
-    //     // window.location.href = response.url;
-    //     // router.push(response.url);
-    //     const redirectUrl = new URL(response.url);
-    //     // Object.entries(queryParams).forEach(([key, value]) => {
-    //     //   redirectUrl.searchParams.append(key, value);
-    //     // });
-    //     // window.location.href = redirectUrl.toString();
-    //     // console.log("Redirecting to:", redirectUrl.toString());
-    //     // router.push(redirectUrl.toString());
-
-    //     const response1 = await fetch(redirectUrl, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/x-www-form-urlencoded",
-    //       Authorization: "Basic " + btoa("admin@email.com:1234"),
-    //     },
-    //     // redirect: "manual",
-    //     body: new URLSearchParams({
-    //       response_type: 'code',
-    //       client_id: 'capstone-project-auth-code-pkce-1',
-    //       redirect_uri: 'http://localhost:3000',
-    //       scope: 'openid email',
-    //       state: '4qFl3tTCkYb2R6pD',
-    //       code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
-    //       code_challenge_method: 'S256'
-    //     }),
-    //   });
-
-    //   console.dir("Response 1: ", response1);
-    //   }
-    // } catch (error) {
-    //   console.error("Fetch Error:", error);
-    // }
-
-    // Create a new URLSearchParams instance
-    // const formData = new FormData(event.currentTarget);
-    // const urlEncodedData = new URLSearchParams();
-
-    // // Convert FormData to URLSearchParams
-    // formData.forEach((value, key) => {
-    //   urlEncodedData.append(key, value as string);
-    // });
-
-    // console.log(urlEncodedData.toString());
-    console.log("Send Request To Auth Server Handler");
-
     // Construct the base URL
-    const baseURL = 'http://localhost:8084';
+    const baseURL = 'http://localhost:8084/oauth2/authorize';
 
     // Define query parameters
-    // const queryParams = {
-    //   response_type: 'code',
-    //   client_id: 'capstone-project-auth-code-pkce-1',
-    //   redirect_uri: 'http://localhost:3000',
-    //   scope: 'openid email',
-    //   state: '4qFl3tTCkYb2R6pD',
-    //   code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
-    //   code_challenge_method: 'S256'
-    // };
+    const queryParams = {
+      response_type: 'code',
+      client_id: 'capstone-project-auth-code-pkce-1',
+      redirect_uri: 'http://localhost:3000',
+      scope: 'openid email',
+      state: '4qFl3tTCkYb2R6pD',
+      code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+      code_challenge_method: 'S256'
+    };
 
     // Use URLSearchParams to append parameters
     const url = new URL(baseURL);
-    // Object.entries(queryParams).forEach(([key, value]) => {
-    //   url.searchParams.append(key, value);
-    // });
+    Object.entries(queryParams).forEach(([key, value]) => {
+      url.searchParams.append(key, value);
+    });
 
     console.dir(url);
     try {
       const response = await fetch(url.toString(), {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Basic YWRtaW5AZW1haWwuY29tOjEyMzQ',
-          'Content-Type': "Basic " + btoa("admin@email.com:1234"),
-        },
+        method: 'GET',
+        // headers: {
+        //   // 'Authorization': 'Basic YWRtaW5AZW1haWwuY29tOjEyMzQ',
+        //   // 'Content-Type': 'application/json',
+        // },
       }).then((response) => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -246,39 +144,123 @@ export default function Home() {
       // Process the response
       console.log("Redirected to:", response.url);
 
-      // if (response.url) {
+      if (response.url) {
         // window.location.href = response.url;
         // router.push(response.url);
-        // const redirectUrl = new URL(response.url);
+        const redirectUrl = new URL(response.url);
         // Object.entries(queryParams).forEach(([key, value]) => {
         //   redirectUrl.searchParams.append(key, value);
         // });
         // window.location.href = redirectUrl.toString();
         // console.log("Redirecting to:", redirectUrl.toString());
-        // router.push(redirectUrl.toString());
+        router.push(redirectUrl.toString());
 
-        //   const response1 = await fetch(redirectUrl, {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/x-www-form-urlencoded",
-        //     Authorization: "Basic " + btoa("admin@email.com:1234"),
-        //   },
-        //   body: new URLSearchParams({
-        //     response_type: 'code',
-        //     client_id: 'capstone-project-auth-code-pkce-1',
-        //     redirect_uri: 'http://localhost:3000',
-        //     scope: 'openid email',
-        //     state: '4qFl3tTCkYb2R6pD',
-        //     code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
-        //     code_challenge_method: 'S256'
-        //   }),
-        // });
-        // 
-        // console.dir("Response 1: ", response1);
-        // }
+        // const response1 = await fetch(redirectUrl, {
+        // method: "POST",
+        // headers: {
+        //   "Content-Type": "application/x-www-form-urlencoded",
+        //   Authorization: "Basic " + btoa("admin@email.com:1234"),
+        // },
+        // // redirect: "manual",
+        // body: new URLSearchParams({
+        //   response_type: 'code',
+        //   client_id: 'capstone-project-auth-code-pkce-1',
+        //   redirect_uri: 'http://localhost:3000',
+        //   scope: 'openid email',
+        //   state: '4qFl3tTCkYb2R6pD',
+        //   code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+        //   code_challenge_method: 'S256'
+        // }),
+      //   },
+      // });
+
+      // console.dir("Response 1: ", response1);
+
+      }
     } catch (error) {
       console.error("Fetch Error:", error);
     }
+
+    // // Create a new URLSearchParams instance
+    // const formData = new FormData(event.currentTarget);
+    // const urlEncodedData = new URLSearchParams();
+
+    // // Convert FormData to URLSearchParams
+    // formData.forEach((value, key) => {
+    //   urlEncodedData.append(key, value as string);
+    // });
+
+    // console.log(urlEncodedData.toString());
+    // console.log("Send Request To Auth Server Handler");
+
+    // // Construct the base URL
+    // const baseURL1 = 'http://localhost:8084';
+
+    // // Define query parameters
+    // const queryParams1 = {
+    //   response_type: 'code',
+    //   client_id: 'capstone-project-auth-code-pkce-1',
+    //   redirect_uri: 'http://localhost:3000',
+    //   scope: 'openid email',
+    //   state: '4qFl3tTCkYb2R6pD',
+    //   code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+    //   code_challenge_method: 'S256'
+    // };
+
+    // // Use URLSearchParams to append parameters
+    // const url1 = new URL(baseURL);
+    // Object.entries(queryParams).forEach(([key, value]) => {
+    //   url1.searchParams.append(key, value);
+    // });
+
+    // console.dir(url1);
+    // try {
+    //   const response = await fetch(url1.toString(), {
+    //     method: 'POST',
+    //     headers: {
+    //       'Authorization': 'Basic YWRtaW5AZW1haWwuY29tOjEyMzQ',
+    //       'Content-Type': "Basic " + btoa("admin@email.com:1234"),
+    //     },
+    //   }).then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error(`Error: ${response.statusText}`);
+    //     }
+    //     return response;
+    //   });
+  
+
+    //   if (response.url) {
+    //     // window.location.href = response.url;
+    //     const redirectUrl = new URL(response.url);
+    //     // Object.entries(queryParams).forEach(([key, value]) => {
+    //     //   redirectUrl.searchParams.append(key, value);
+    //     // });
+    //     // window.location.href = redirectUrl.toString();
+    //     console.log("Redirecting to:", redirectUrl.toString());
+    //     // router.push(redirectUrl.toString());
+
+    //     //   const response1 = await fetch(redirectUrl, {
+    //     //   method: "POST",
+    //     //   headers: {
+    //     //     "Content-Type": "application/x-www-form-urlencoded",
+    //     //     Authorization: "Basic " + btoa("admin@email.com:1234"),
+    //     //   },
+    //     //   body: new URLSearchParams({
+    //     //     response_type: 'code',
+    //     //     client_id: 'capstone-project-auth-code-pkce-1',
+    //     //     redirect_uri: 'http://localhost:3000',
+    //     //     scope: 'openid email',
+    //     //     state: '4qFl3tTCkYb2R6pD',
+    //     //     code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+    //     //     code_challenge_method: 'S256'
+    //     //   }),
+    //     // });
+    //     // 
+    //     // console.dir("Response 1: ", response1);
+    //     }
+    // } catch (error) {
+    //   console.error("Fetch Error:", error);
+    // }
   };
   
   return (
