@@ -3,11 +3,13 @@
 // import styles from "./page.module.scss";
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const searchParams = useSearchParams();
   const [authorizationCode, setAuthorizationCode] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
+  // const router = useRouter();
 
   const sendRequestToAuthServerHandler = async () => {
     console.log("Send Request To Auth Server Handler");
@@ -68,20 +70,10 @@ export default function Home() {
   }
 
   async function exchangeCodeForTokens(code: string) {
-    // alert(JSON.stringify(code));
     try {
       const baseURL = 'http://localhost:8084/oauth2/token';
-
-      // Send the POST request
-      // const controller = new AbortController();
-      // setTimeout(() => controller.abort(), 3000000);
       const response = await fetch(baseURL, {
-        // signal: controller.signal,
         method: 'POST',
-        // headers: {
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-          // 'Access-Control-Allow-Origin': 'http://localhost:3000',
-        // },
         body: new URLSearchParams({
           'grant_type': 'authorization_code',
           'client_id': 'capstone-project-auth-code-pkce-1',
@@ -91,7 +83,6 @@ export default function Home() {
         }),
       });
   
-      // Handle the response
       if (response.ok) {
         const data = await response.json();
         if (data.access_token) {
@@ -111,50 +102,138 @@ export default function Home() {
       alert("ERROR: " + error);
     }
   };
-
+  
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // // Create a new URLSearchParams instance
+    // const formData = new FormData(event.currentTarget);
+    // const urlEncodedData = new URLSearchParams();
+
+    // // Convert FormData to URLSearchParams
+    // formData.forEach((value, key) => {
+    //   urlEncodedData.append(key, value as string);
+    // });
+
+    // console.log(urlEncodedData.toString());
+    // console.log("Send Request To Auth Server Handler");
+
+    // // Construct the base URL
+    // const baseURL = 'http://localhost:8084/oauth2/authorize';
+
+    // // Define query parameters
+    // const queryParams = {
+    //   response_type: 'code',
+    //   client_id: 'capstone-project-auth-code-pkce-1',
+    //   redirect_uri: 'http://localhost:3000',
+    //   scope: 'openid email',
+    //   state: '4qFl3tTCkYb2R6pD',
+    //   code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+    //   code_challenge_method: 'S256'
+    // };
+
+    // // Use URLSearchParams to append parameters
+    // const url = new URL(baseURL);
+    // Object.entries(queryParams).forEach(([key, value]) => {
+    //   url.searchParams.append(key, value);
+    // });
+
+    // console.dir(url);
+    // try {
+    //   const response = await fetch(url.toString(), {
+    //     method: 'GET',
+    //     // headers: {
+    //     //   // 'Authorization': 'Basic YWRtaW5AZW1haWwuY29tOjEyMzQ',
+    //     //   // 'Content-Type': 'application/json',
+    //     // },
+    //   }).then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error(`Error: ${response.statusText}`);
+    //     }
+    //     return response;
+    //   });
+  
+    //   if (!response.ok) {
+    //     throw new Error(`Error: ${response.statusText}`);
+    //   }
+  
+    //   // Process the response
+    //   console.log("Redirected to:", response.url);
+
+    //   if (response.url) {
+    //     // window.location.href = response.url;
+    //     // router.push(response.url);
+    //     const redirectUrl = new URL(response.url);
+    //     // Object.entries(queryParams).forEach(([key, value]) => {
+    //     //   redirectUrl.searchParams.append(key, value);
+    //     // });
+    //     // window.location.href = redirectUrl.toString();
+    //     // console.log("Redirecting to:", redirectUrl.toString());
+    //     // router.push(redirectUrl.toString());
+
+    //     const response1 = await fetch(redirectUrl, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/x-www-form-urlencoded",
+    //       Authorization: "Basic " + btoa("admin@email.com:1234"),
+    //     },
+    //     // redirect: "manual",
+    //     body: new URLSearchParams({
+    //       response_type: 'code',
+    //       client_id: 'capstone-project-auth-code-pkce-1',
+    //       redirect_uri: 'http://localhost:3000',
+    //       scope: 'openid email',
+    //       state: '4qFl3tTCkYb2R6pD',
+    //       code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+    //       code_challenge_method: 'S256'
+    //     }),
+    //   });
+
+    //   console.dir("Response 1: ", response1);
+    //   }
+    // } catch (error) {
+    //   console.error("Fetch Error:", error);
+    // }
+
     // Create a new URLSearchParams instance
-    const formData = new FormData(event.currentTarget);
-    const urlEncodedData = new URLSearchParams();
+    // const formData = new FormData(event.currentTarget);
+    // const urlEncodedData = new URLSearchParams();
 
-    // Convert FormData to URLSearchParams
-    formData.forEach((value, key) => {
-      urlEncodedData.append(key, value as string);
-    });
+    // // Convert FormData to URLSearchParams
+    // formData.forEach((value, key) => {
+    //   urlEncodedData.append(key, value as string);
+    // });
 
-    console.log(urlEncodedData.toString());
+    // console.log(urlEncodedData.toString());
     console.log("Send Request To Auth Server Handler");
 
     // Construct the base URL
-    const baseURL = 'http://localhost:8084/oauth2/authorize';
+    const baseURL = 'http://localhost:8084';
 
     // Define query parameters
-    const queryParams = {
-      response_type: 'code',
-      client_id: 'capstone-project-auth-code-pkce-1',
-      redirect_uri: 'http://localhost:3000',
-      scope: 'openid email',
-      state: '4qFl3tTCkYb2R6pD',
-      code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
-      code_challenge_method: 'S256'
-    };
+    // const queryParams = {
+    //   response_type: 'code',
+    //   client_id: 'capstone-project-auth-code-pkce-1',
+    //   redirect_uri: 'http://localhost:3000',
+    //   scope: 'openid email',
+    //   state: '4qFl3tTCkYb2R6pD',
+    //   code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+    //   code_challenge_method: 'S256'
+    // };
 
     // Use URLSearchParams to append parameters
     const url = new URL(baseURL);
-    Object.entries(queryParams).forEach(([key, value]) => {
-      url.searchParams.append(key, value);
-    });
+    // Object.entries(queryParams).forEach(([key, value]) => {
+    //   url.searchParams.append(key, value);
+    // });
 
     console.dir(url);
-
     try {
       const response = await fetch(url.toString(), {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Authorization': 'Basic YWRtaW5AZW1haWwuY29tOjEyMzQ',
-          'Content-Type': 'application/json',
+          'Content-Type': "Basic " + btoa("admin@email.com:1234"),
         },
       }).then((response) => {
         if (!response.ok) {
@@ -171,29 +250,35 @@ export default function Home() {
       console.log("Redirected to:", response.url);
 
       // if (response.url) {
-      //   window.location.href = response.url;
-      // }
+        // window.location.href = response.url;
+        // router.push(response.url);
+        // const redirectUrl = new URL(response.url);
+        // Object.entries(queryParams).forEach(([key, value]) => {
+        //   redirectUrl.searchParams.append(key, value);
+        // });
+        // window.location.href = redirectUrl.toString();
+        // console.log("Redirecting to:", redirectUrl.toString());
+        // router.push(redirectUrl.toString());
 
-        // If the server responds with a redirect URL for OAuth flow, fetch it programmatically
-      if (response.url) {
-        // const credentials = `${'admin@email.com'}:${'1234'}`;
-        // const base64Credentials = btoa(credentials);
-        const oauthResponse = await fetch(response.url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            username: 'admin@email.com',
-            password: '1234',
-          }),
-        });
-        if (!oauthResponse.ok) {
-          throw new Error(`OAuth Fetch Error: ${oauthResponse.statusText}`);
-        }
-        const data = await oauthResponse.text();
-        console.log("OAuth Response Data:", data);
-      }
+        //   const response1 = await fetch(redirectUrl, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/x-www-form-urlencoded",
+        //     Authorization: "Basic " + btoa("admin@email.com:1234"),
+        //   },
+        //   body: new URLSearchParams({
+        //     response_type: 'code',
+        //     client_id: 'capstone-project-auth-code-pkce-1',
+        //     redirect_uri: 'http://localhost:3000',
+        //     scope: 'openid email',
+        //     state: '4qFl3tTCkYb2R6pD',
+        //     code_challenge: 'Tgc1QidrfeRMUExvgLljq621HlAIkc5YJ7NmUfGiryA',
+        //     code_challenge_method: 'S256'
+        //   }),
+        // });
+        // 
+        // console.dir("Response 1: ", response1);
+        // }
     } catch (error) {
       console.error("Fetch Error:", error);
     }
