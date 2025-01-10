@@ -123,15 +123,18 @@ export default function Home() {
 
   try {
     const response = await fetch(url.toString(), {
-      method: 'POST',
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: "Basic " + btoa("admin@email.com:1234"),
-        },
+      method: 'GET',
+        //   headers: {
+        //     "Content-Type": "application/x-www-form-urlencoded",
+        //     Authorization: "Basic " + btoa("admin@email.com:1234"),
+        // },
+        redirect: 'manual',
     });
 
     if (response.ok) {
-      // const redirectUrl = response.url;
+      const redirectUrl = response.url;
+      console.log("Redirect URL: ", redirectUrl);
+      console.log('Redirected to:', response.headers.get('Location'));
       // if (redirectUrl) {
       //   console.log("Redirecting to:", redirectUrl);
       //   // router.push(redirectUrl);
@@ -142,7 +145,7 @@ export default function Home() {
       //       Authorization: "Basic " + btoa("admin@email.com:1234"),
       //     },
       //   });
-      //   console.log("Response: ", JSON.stringify(response));
+        console.dir("Response: ", JSON.stringify(response));
       // } else {
       //   console.error('No redirect URL provided by the server.');
       // }
