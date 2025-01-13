@@ -141,8 +141,8 @@
     {
       "name": "Puppeteer&NextJs: debug full stack",
       "configurations": [
-        "Next.js: debug client-side",
-        "Next.js: debug server-side",
+        // "Next.js: debug client-side",
+        // "Next.js: debug server-side",
         "Puppeteer: debug library code"
       ],
       "stopAll": true
