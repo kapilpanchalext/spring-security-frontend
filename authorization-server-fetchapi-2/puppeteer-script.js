@@ -10,7 +10,7 @@ const browser = await puppeteer.launch({
   devtools: true,
   args: ['--remote-debugging-port=9222'],
   dumpio: true,
-  slowMo: 1000
+  slowMo: 500
 });
 const page = await browser.newPage();
 
