@@ -1,44 +1,87 @@
+// with Puppeteer Both Debug working - Puppeteer in Javascript and NextJS, Chromium c++ not installed
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+    
+//     {
+//       "type": "node",
+//       "request": "launch",
+//       "name": "Puppeteer: debug",
+//       "program": "${workspaceFolder}\\authorization-server-fetchapi-2\\puppeteer-script.js",
+//       "cwd": "${workspaceFolder}",
+//       "runtimeExecutable": "node",
+//       "env": {
+//         "NODE_OPTIONS": "--inspect"
+//       },
+//       "sourceMaps": true,
+//       "outputCapture": "std",
+//       // "skipFiles": [
+//       //   "<node_internals>/**"
+//       // ],
+//     },
+//     {
+//       "type": "chrome",
+//       "request": "attach",
+//       "name": "Application: debug",
+//       "port": 9222,
+//       "webRoot": "${workspaceFolder}",
+//       "sourceMapPathOverrides": {
+//         "webpack://_N_E/*": "${webRoot}/*"
+//       },
+//       "timeout": 100000,
+//       // "skipFiles": ["<node_internals>/**"]
+//     }
+//   ],
+//   "compounds": [
+//     {
+//       "name": "App-Puppeteer Debug",
+//       "configurations": [
+//         "Application: debug",
+//         "Puppeteer: debug",
+        
+//       ],
+//       "stopAll": true
+//     }
+//   ]
+// }
+
+
+// without Puppeteer client Debug working
 {
   "version": "0.2.0",
   "configurations": [
-    
     {
+      "name": "Next.js: debug server-side",
+      "port": 9230,
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "type": "node",
-      "request": "launch",
-      "name": "Puppeteer: debug",
-      "program": "${workspaceFolder}\\authorization-server-fetchapi-2\\puppeteer-script.js",
-      "cwd": "${workspaceFolder}",
-      "runtimeExecutable": "node",
-      "env": {
-        "NODE_OPTIONS": "--inspect"
-      },
-      "sourceMaps": true,
-      "outputCapture": "std",
-      // "skipFiles": [
-      //   "<node_internals>/**"
-      // ],
+      "sourceMapPathOverrides": {
+         "/turbopack/[project]/*": "${webRoot}/*"
+      }
     },
     {
       "type": "chrome",
-      "request": "attach",
-      "name": "Application: debug",
-      "port": 9222,
+      "request": "launch",
+      "name": "Next.js: debug client-side",
+      "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}",
+      "runtimeExecutable": "C:\\Users\\kapil.panchal.ext\\.cache\\puppeteer\\chrome\\win64-131.0.6778.264\\chrome-win64\\chrome.exe",
+      "runtimeArgs": [
+        "--window-size=1080,640",
+        "--auto-open-devtools-for-tabs",
+      ],
       "sourceMapPathOverrides": {
-        "webpack://_N_E/*": "${webRoot}/*"
-      },
-      "timeout": 100000,
-      // "skipFiles": ["<node_internals>/**"]
+         "/turbopack/[project]/*": "${webRoot}/*"
+      }
     }
   ],
   "compounds": [
     {
-      "name": "App-Puppeteer Debug",
-      "configurations": [
-        "Application: debug",
-        "Puppeteer: debug",
-        
-      ],
+      "name": "Next.js: full stack",
+      "configurations": ["Next.js: debug client-side", "Next.js: debug server-side"],
       "stopAll": true
     }
   ]

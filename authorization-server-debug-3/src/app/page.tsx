@@ -132,9 +132,9 @@ export default function Home() {
 
     if (response.ok) {
       const redirectUrl = response.url;
-      console.log("Redirect URL: ", redirectUrl);
-      console.log('Redirected to:', response.headers.get('Location'));
-      console.dir("Response: ", JSON.stringify(response));
+      // console.log("Redirect URL: ", redirectUrl);
+      console.log('Headers:', JSON.stringify(response.headers));
+      // console.dir("Response: ", JSON.stringify(response));
     } else {
       throw new Error(`Error: ${response.statusText}`);
     }
