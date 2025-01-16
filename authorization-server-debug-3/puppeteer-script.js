@@ -9,9 +9,23 @@ const browser = await puppeteer.launch({
   //   height: 1080
   // },
   devtools: true,
-  args: ['--remote-debugging-port=9222'],
+  args: ['--incognito'],
 });
-const page = await browser.newPage();
+
+const context = await browser.createIncognitoBrowserContext();
+const page = await context.newPage();
+// const page = await browser.newPage();
+
+// get the page created by default when launch async ran and close it whilst keeping the browser active
+// var browserPages = await browser.PagesAsync();
+// await browserPages[0].CloseAsync();
+
+// Navigate to the desired URL
+await page.goto('http://localhost:3000');
+
+// Log the title of the page (optional)
+const title = await page.title();
+console.log(`Page title: ${title}`);
 
 // Navigate the page to a URL.
 await page.goto('http://localhost:3000');

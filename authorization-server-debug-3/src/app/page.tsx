@@ -1,12 +1,13 @@
 "use client"
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const [authorizationCode, setAuthorizationCode] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
-  const router = useRouter();
+  // const router = useRouter();
+  // const pathname = usePathname();
 
   const sendRequestToAuthServerHandler = async () => {
     console.log("Send Request To Auth Server Handler");
@@ -97,17 +98,32 @@ export default function Home() {
       alert("ERROR: " + error);
     }
   };
+
+  const allParams = searchParams;
+  console.log("All Params1: ", allParams);
+  // console.log("Pathname1: ", pathname);
+
+  useEffect(() => {
+    const allParams = searchParams;
+    console.log("All Params2: ", allParams);
+    const code = searchParams.get('code');
+    const state = searchParams.get('state');
+  
+    console.log("CODE: ", code);
+    console.log("STATE: ", state);
+  }, [searchParams]);
   
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Send Request To Auth Server Handler");
     const loginData = new URLSearchParams();
-  
+
     // Replace with the actual input field names from the form
     loginData.append('username', 'admin@email.com');
     loginData.append('password', '1234');
 
     const baseURL = 'http://localhost:8084/oauth2/authorize';
+    
     const queryParams = {
       response_type: 'code',
       client_id: 'capstone-project-auth-code-pkce-1',
@@ -126,84 +142,21 @@ export default function Home() {
     console.log("Constructed URL:", url.toString());
 
     try {
-      const response = await fetch(url.toString(), {
+      await fetch(url.toString(), {
         method: 'GET',
         credentials: "include",
-        //     headers: {
-        //       "Content-Type": "application/x-www-form-urlencoded",
-        //       Authorization: "Basic " + btoa("admin@email.com:1234"),
-        //   },
-        // redirect: 'manual',
-        // body: loginData.toString(),
+        mode: "no-cors",
+        keepalive: true,
       });
 
-      if (response.ok) {
-        const redirectUrl = response.url;
-        const cookies = document.cookie;
-        console.log(cookies);
-
-        if (!cookies) {
-          throw new Error("No cookies found in the response.");
-        }
-
-        // Parse cookies to find the XSRF token
-        const xsrfTokenMatch = cookies.match(/XSRF-TOKEN=([^;]+)/);
-        if (!xsrfTokenMatch) {
-          throw new Error("Failed to extract XSRF token from cookies.");
-        }
-        const csrfToken = xsrfTokenMatch[1];
-        console.log("Extracted XSRF Token:", csrfToken);
-    
-        if (!csrfToken) {
-          throw new Error("Failed to extract CSRF token from login page.");
-        }
-        loginData.append("_csrf", csrfToken);
-        // console.log("Redirect URL: ", redirectUrl);
-        // console.log('Headers:', JSON.stringify(response.headers));
-        // console.dir("Response: ", JSON.stringify(response));
-        console.log("URL: ", redirectUrl);
-        console.log("Status:", response.status);
-        console.log("Headers:");
-
-        response.headers.forEach((value, name) => {
-          console.log(`${name}: ${value}`);
-        });
-
-        const htmlContent = await response.text();
-        console.log("HTML Content:", htmlContent);
-
-
-        const urlRedirected = new URL(redirectUrl);
-        // Object.entries(queryParams).forEach(([key, value]) => {
-        //   urlRedirected.searchParams.append(key, value);
-        // });
-
-        console.log("Login Data: ", loginData.get('username'));
-
-        const responsePost = await fetch(urlRedirected, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: "Basic " + btoa("admin@email.com:1234"),
-            // "X-XSRF-TOKEN": csrfToken,
-          },
-          body: loginData.toString(),
-          credentials: "include",
-          // redirect: 'manual',
-        });
-
-        if (responsePost.ok) {
-          console.log("1 Login successful!");
-          console.log("1 Redirecting to:", responsePost.headers.get('Location'));
-        } else if (responsePost.status === 302 || response.status === 301) {
-          console.log("1 Redirect to:", responsePost.headers.get('Location'));
-          // Optionally, follow the redirect manually
-        } else {
-          console.error("1 Login failed:", responsePost.status, responsePost.statusText);
-        }
-      } else {
-        throw new Error(`Error: ${response.statusText}`);
-      }
+      // console.log("Constructed URL:", url.toString());
+      
+      // if (response.ok) {
+      //   const redirectUrl = response.url;
+      //   console.log("Redirect URL:", redirectUrl);
+      // } else {
+      //   throw new Error(`Error: ${response.statusText}`);
+      // }
     } catch (err) {
       console.error("Error in authorization request:", err.message);
     }
