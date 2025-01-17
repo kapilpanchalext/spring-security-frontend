@@ -1,13 +1,12 @@
 "use client"
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const [authorizationCode, setAuthorizationCode] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
   const [isResponseReceived, setIsResponseReceived] = useState<boolean>(false);
-  // const [counter, setCounter] = useState<number>(0);
   const router = useRouter();
 
   const sendRequestToAuthServerHandler = async () => {
@@ -157,7 +156,7 @@ export default function Home() {
         credentials: "include",
         mode: "cors",
         headers: {
-            Authorization: "Basic " + btoa("admin@email.com:1234"),
+          Authorization: "Basic " + btoa("admin@email.com:1234"),
         },
       });
 
