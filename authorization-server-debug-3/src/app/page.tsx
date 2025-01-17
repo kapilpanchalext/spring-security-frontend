@@ -1,13 +1,14 @@
 "use client"
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const searchParams = useSearchParams();
   const [authorizationCode, setAuthorizationCode] = useState<string>();
   const [accessToken, setAccessToken] = useState<string>();
-  // const router = useRouter();
-  // const pathname = usePathname();
+  const [isResponseReceived, setIsResponseReceived] = useState<boolean>(false);
+  // const [counter, setCounter] = useState<number>(0);
+  const router = useRouter();
 
   const sendRequestToAuthServerHandler = async () => {
     console.log("Send Request To Auth Server Handler");
@@ -60,11 +61,6 @@ export default function Home() {
     }
   };
 
-  const accessTokenHandler = () => {  
-    console.log("Get Access Token Handler: ");
-    exchangeCodeForTokens(authorizationCode!);
-  }
-
   async function exchangeCodeForTokens(code: string) {
     try {
       const baseURL = 'http://localhost:8084/oauth2/token';
@@ -98,32 +94,46 @@ export default function Home() {
       alert("ERROR: " + error);
     }
   };
-
+  
   const allParams = searchParams;
   console.log("All Params1: ", allParams);
-  // console.log("Pathname1: ", pathname);
-
-  useEffect(() => {
-    const allParams = searchParams;
-    console.log("All Params2: ", allParams);
-    const code = searchParams.get('code');
-    const state = searchParams.get('state');
   
-    console.log("CODE: ", code);
-    console.log("STATE: ", state);
-  }, [searchParams]);
+  const code = searchParams.get('code');
+  console.log("CODE1: ", code);
+
+  const accessTokenHandler = () => {  
+    console.log("Get Access Token Handler: ");
+    setTimeout(() => {
+      exchangeCodeForTokens(code!);
+      console.log("EXECUTING CODE: ", code);
+    }, 10000);
+  }
+  accessTokenHandler();
+  // if(isResponseReceived){
+  //   exchangeCodeForTokens(code!);
+  // }
+  // useEffect(() => {
+  //   const allParams = searchParams;
+  //   console.log("All Params2: ", allParams);
+  //   const code = searchParams.get('code');
+  //   const state = searchParams.get('state');
+  
+  //   console.log("CODE: ", code);
+  //   console.log("STATE: ", state);
+  // }, [searchParams]);
   
   const handleSubmit = async(event: React.FormEvent<HTMLFormElement>) => {
+    
     event.preventDefault();
     console.log("Send Request To Auth Server Handler");
     const loginData = new URLSearchParams();
-
+    
     // Replace with the actual input field names from the form
     loginData.append('username', 'admin@email.com');
     loginData.append('password', '1234');
 
     const baseURL = 'http://localhost:8084/oauth2/authorize';
-    
+
     const queryParams = {
       response_type: 'code',
       client_id: 'capstone-project-auth-code-pkce-1',
@@ -142,26 +152,35 @@ export default function Home() {
     console.log("Constructed URL:", url.toString());
 
     try {
-      await fetch(url.toString(), {
+      const response = await fetch(url.toString(), {
         method: 'GET',
         credentials: "include",
-        mode: "no-cors",
-        keepalive: true,
+        mode: "cors",
+        headers: {
+            Authorization: "Basic " + btoa("admin@email.com:1234"),
+        },
       });
 
+      if(response){
+        console.log("RESPONSE: ", JSON.stringify(response));
+        setIsResponseReceived(true);
+      }
+
       // console.log("Constructed URL:", url.toString());
-      
+
       // if (response.ok) {
       //   const redirectUrl = response.url;
       //   console.log("Redirect URL:", redirectUrl);
       // } else {
       //   throw new Error(`Error: ${response.statusText}`);
       // }
+
+      // Get Access Token
     } catch (err) {
       console.error("Error in authorization request:", err.message);
     }
   };
-  
+
   return (
     <>
       <h1>OAuth2.0 App</h1>
