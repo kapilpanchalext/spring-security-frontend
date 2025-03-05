@@ -5,32 +5,32 @@ import styles from "./page.module.scss";
 
 export default function Home() {
 
-  // const [responseData, setResponseData] = useState("");
+  const [responseData, setResponseData] = useState("");
 
   // Button click handler
   const handleClick = async () => {
 
-    window.location.href = "http://localhost:9001";
+    // window.location.href = "http://localhost:8084/api/v1/helloworld";
 
-    // try {
-    //   const response = await fetch("http://localhost:9001", {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Basic " + btoa("admin@email.com:1234")
-    //     },
-    //   });
+    try {
+      const response = await fetch("http://localhost:8084/api/v1/helloworld", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Basic " + btoa("admin@email.com:1234")
+        },
+      });
 
-    //   if (!response.ok) {
-    //     throw new Error(`HTTP error! status: ${response.status}`);
-    //   }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    //   const data = await response.text(); // Assuming the server sends plain text response
-    //   setResponseData(data); // Update state with response
-    // } catch (error) {
-    //   console.error("Fetch error:", error);
-    //   setResponseData("Failed to fetch data from the server.");
-    // }
+      const data = await response.text();
+      setResponseData(data);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setResponseData("Failed to fetch data from the server.");
+    }
   };
 
   return (
@@ -38,7 +38,6 @@ export default function Home() {
       <button onClick={handleClick} className={styles.button}>
         Fetch Data
       </button>
-      
     </>
   );
 }
