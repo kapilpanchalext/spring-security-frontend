@@ -45,8 +45,9 @@ const API = "/api/v1/";
 const DOMAIN = PROTOCOL + HOST + ":" + PORT + API;
 
 export const ENDPOINTS = {
-	COURSES_SUBJECTS:   DOMAIN + "getStudentByRollno",
-	STUDENTS:           DOMAIN + "getStudentsList",
-	COURSES:            DOMAIN + "getCourseList",
-	SUBJECTS:           DOMAIN + "getSubjectList"
+	COURSES_SUBJECTS:   				DOMAIN + "getStudentByRollno",
+	STUDENTS:           				DOMAIN + "getStudentsList",
+	COURSES:            				DOMAIN + "getCourseList",
+	SUBJECTS:           				DOMAIN + "getSubjectList",
+	ASSIGN_COURSES_TO_STUDENTS: 	DOMAIN + "assignCoursesToStudents",
 };
