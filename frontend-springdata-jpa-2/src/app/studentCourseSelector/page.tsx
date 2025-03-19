@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 const StudentCourseSelector = () => {
   const[studentData, setStudentData] = useState<StudentModel[]>([]);
   const[courseData, setCourseData] = useState<CourseModel[]>([]);
-
   const [studentCourses, setStudentCourses] = useState<{ [key: string]: { courseno: string; coursename: string }[] }>({});
 
   const studentListHandler = async (event: React.MouseEvent) => {
@@ -79,48 +78,60 @@ const StudentCourseSelector = () => {
   // Handle Drag Start
 
   const dragStartHandler = (event: React.DragEvent, courseno: string, coursename: string) => {
-  event.dataTransfer.setData("courseno", courseno);
-  event.dataTransfer.setData("coursename", coursename);
-};
+    event.dataTransfer.setData("courseno", courseno);
+    event.dataTransfer.setData("coursename", coursename);
+  };
 
-// Handle Drop Event (Assign Course)
-const dropHandler = (event: React.DragEvent, studentId: string) => {
-  event.preventDefault();
-  const courseno = event.dataTransfer.getData("courseno");
-  const coursename = event.dataTransfer.getData("coursename");
+  // Handle Drop Event (Assign Course)
+  const dropHandler = async (event: React.DragEvent, studentId: string) => {
+    event.preventDefault();
+    const courseno = event.dataTransfer.getData("courseno");
+    const coursename = event.dataTransfer.getData("coursename");
 
-  if (!courseno || !coursename) return;
+    if (!courseno || !coursename) return;
 
-  setStudentCourses((prev) => {
-    const updatedCourses = { ...prev };
+    try {
+      const url = ENDPOINTS.ASSIGN_COURSES_TO_STUDENTS;
+      const response = await fetch(`${url}?rollNo=${studentId}&courseNo=${courseno}`, {
+        method: "PUT",
+      });
 
-    if (!updatedCourses[studentId]) {
-      updatedCourses[studentId] = [];
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.dir(data);
+
+      // Ensure state updates **after** a successful API call
+      setStudentCourses((prev) => {
+        const updatedCourses = { ...prev };
+
+        if (!updatedCourses[studentId]) {
+          updatedCourses[studentId] = [];
+        }
+
+        const alreadyAssigned = updatedCourses[studentId].some(course => course.courseno === courseno);
+        if (!alreadyAssigned) {
+          updatedCourses[studentId] = [...updatedCourses[studentId], { courseno, coursename }];
+        }
+        console.log(`Course assigned: ${studentId} -> ${courseno}`);
+        return updatedCourses;
+      });
+
+    } catch (error) {
+      console.error("Error fetching student course subjects: ", error);
     }
+  };
 
-    const alreadyAssigned = updatedCourses[studentId].some(course => course.courseno === courseno);
-    if (!alreadyAssigned) {
-      updatedCourses[studentId] = [...updatedCourses[studentId], { courseno, coursename }];
-    }
-    console.log(studentId + " " + courseno);
-
-    
-
-
-
-    return updatedCourses;
-  });
-};
-
-// Handle Course Removal
-const removeCourseHandler = (studentId: string, courseno: string) => {
-  setStudentCourses((prev) => {
-    const updatedCourses = { ...prev };
-    updatedCourses[studentId] = updatedCourses[studentId].filter(course => course.courseno !== courseno);
-
-    return updatedCourses;
-  });
-};
+  // Handle Course Removal
+  const removeCourseHandler = (studentId: string, courseno: string) => {
+    setStudentCourses((prev) => {
+      const updatedCourses = { ...prev };
+      updatedCourses[studentId] = updatedCourses[studentId].filter(course => course.courseno !== courseno);
+      return updatedCourses;
+    });
+  };
 
   return (
     <>
@@ -136,9 +147,8 @@ const removeCourseHandler = (studentId: string, courseno: string) => {
                 className="border border-gray-400 text-black font-bold m-2 p-6 rounded w-64 text-center"
                 key={index}
                 onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => dropHandler(event, student.rollno)}
-              >
-                <p>{student.firstname + " " + student.lastname}</p>
+                onDrop={(event) => dropHandler(event, student.rollno)}>
+                  <p>{student.firstname + " " + student.lastname}</p>
 
                 {/* Assigned Courses with Delete Button */}
                 <div className="mt-2">
@@ -147,8 +157,7 @@ const removeCourseHandler = (studentId: string, courseno: string) => {
                       <span>{course.coursename}</span>
                       <button
                         className="text-black px-2 py-1 rounded ml-2"
-                        onClick={() => removeCourseHandler(student.rollno, course.courseno)}
-                      >
+                        onClick={() => removeCourseHandler(student.rollno, course.courseno)}>
                         X
                       </button>
                     </div>
@@ -165,9 +174,8 @@ const removeCourseHandler = (studentId: string, courseno: string) => {
                 className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-6 px-6 m-2 rounded"
                 key={index}
                 draggable="true"
-                onDragStart={(event) => dragStartHandler(event, course.courseno, course.coursename)}
-              >
-                <p>{course.coursename}</p>
+                onDragStart={(event) => dragStartHandler(event, course.courseno, course.coursename)}>
+                  <p>{course.coursename}</p>
               </div>
             ))}
           </div>
