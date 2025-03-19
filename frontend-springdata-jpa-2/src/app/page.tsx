@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <>
-      <h1>Spring Data JPA</h1>
+      <h1 className="text-3xl font-bold underline">Spring Data JPA</h1>
     </>
   );
 }
