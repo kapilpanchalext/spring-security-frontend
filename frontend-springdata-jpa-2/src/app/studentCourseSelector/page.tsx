@@ -1,6 +1,7 @@
 "use client"
 import { CourseModel, ENDPOINTS, StudentModel } from '@/model/DataModel';
 import React, { useState } from 'react';
+import CourseSubjectSelector from '../courseSubjectSelector/page';
 
 const StudentCourseSelector = () => {
   const [studentData, setStudentData] = useState<StudentModel[]>([]);
@@ -143,7 +144,9 @@ const StudentCourseSelector = () => {
                 draggable="true"
                 onDragStart={(event) => dragStartHandler(event, course.courseno, course.coursename)}>
                   <p>{course.coursename}</p>
+                  {/* <CourseSubjectSelector key={index} /> */}
               </div>
+              
             ))}
           </div>
         </div>

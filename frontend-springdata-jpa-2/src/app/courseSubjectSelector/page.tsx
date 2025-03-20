@@ -7,7 +7,7 @@ const CourseSubjectSelector = () => {
   const [subjectData, setSubjectData] = useState<SubjectModel[]>([]);
   const [coursesSubject, setCoursesSubject] = useState<{ [key: string]: { subjectno: string; subjectname: string }[] }>({});
 
-  const studentListHandler = async (event: React.MouseEvent) => {
+  const courseListHandler = async (event: React.MouseEvent) => {
     event.preventDefault();
   
     try {
@@ -66,8 +66,6 @@ const CourseSubjectSelector = () => {
   const dragStartHandler = (event: React.DragEvent, subjectno: string, subjectname: string) => {
     event.dataTransfer.setData("subjectno", subjectno);
     event.dataTransfer.setData("subjectname", subjectname);
-
-    // event.dataTransfer.setDragImage(event.target as HTMLElement, 50, 100);
   };
 
   // Handle Drop Event (Assign Course)
@@ -131,7 +129,7 @@ const CourseSubjectSelector = () => {
   return (
     <>
       <h1 className="text-3xl font-bold underline">Spring Data JPA</h1>
-      <button onClick={studentListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Course List</button>
+      <button onClick={courseListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Course List</button>
       
       <div className="flex flex-col w-full mx-auto mt-4">
         <div className="grid grid-cols-2 gap-10">
