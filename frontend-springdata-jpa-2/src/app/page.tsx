@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const[studentCourseSubjectModel, setStudentCourseSubjectModel] = useState<StudentCourseSubjectModel[]>([]);
-  // const[courseData, setCourseData] = useState<CourseModel[]>([]);
-  // const[subjectData, setSubjectData] = useState<SubjectModel[]>([]);
   const router = useRouter();
 
   const studentCourseListHandler = async (event: React.MouseEvent) => {
@@ -28,9 +26,14 @@ export default function Home() {
     }
   };
 
-  const studentListHandler = async (event: React.MouseEvent) => {
+  const studentListHandler = (event: React.MouseEvent) => {
     event.preventDefault();
     router.push('/studentCourseSelector')
+  };
+
+  const courseListHandler = (event: React.MouseEvent) => {
+    event.preventDefault();
+    router.push('/courseSubjectSelector')
   };
 
   return (
@@ -38,7 +41,8 @@ export default function Home() {
       <h1 className="text-3xl font-bold underline">Spring Data JPA</h1>
       <button onClick={studentCourseListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Student Course List</button>
       <button onClick={studentListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Student List</button>
-      
+      <button onClick={courseListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Course List</button>
+
       <div>
         {studentCourseSubjectModel.map((item, index) => (
           <div key={index}>

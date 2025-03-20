@@ -3,8 +3,8 @@ import { CourseModel, ENDPOINTS, StudentModel } from '@/model/DataModel';
 import React, { useState } from 'react';
 
 const StudentCourseSelector = () => {
-  const[studentData, setStudentData] = useState<StudentModel[]>([]);
-  const[courseData, setCourseData] = useState<CourseModel[]>([]);
+  const [studentData, setStudentData] = useState<StudentModel[]>([]);
+  const [courseData, setCourseData] = useState<CourseModel[]>([]);
   const [studentCourses, setStudentCourses] = useState<{ [key: string]: { courseno: string; coursename: string }[] }>({});
 
   const studentListHandler = async (event: React.MouseEvent) => {
@@ -43,40 +43,7 @@ const StudentCourseSelector = () => {
     }
   };
 
-  // const dragStartHandler = (event: React.DragEvent) => {
-  //   const target = event.target as HTMLElement;
-  //   event.dataTransfer.setData("text", target.id);
-  //   console.log(target.id);
-  // };
-
-  // const dragOverHandler = (event: React.DragEvent) => {
-  //   event.preventDefault();
-  // };
-
-  // const dropHandler = (event: React.DragEvent) => {
-  //   event.preventDefault();
-  //   const data = event.dataTransfer.getData("text");
-  //   console.log("DropHandler: " + data);
-  // }
-
-  // const dragStartHandler = (event: React.DragEvent, courseno: string) => {
-  //   event.dataTransfer.setData("text/plain", courseno);
-  //   console.log("Dragging: " + courseno);
-  // };
-  
-  // const dragOverHandler = (event: React.DragEvent) => {
-  //   event.preventDefault();
-  // };
-  
-  // const dropHandler = (event: React.DragEvent) => {
-  //   event.preventDefault();
-  //   const droppedCourseName = event.dataTransfer.getData("text/plain");
-  //   console.log("Dropped Course:", droppedCourseName);
-  // };
-
-
   // Handle Drag Start
-
   const dragStartHandler = (event: React.DragEvent, courseno: string, coursename: string) => {
     event.dataTransfer.setData("courseno", courseno);
     event.dataTransfer.setData("coursename", coursename);

@@ -50,4 +50,5 @@ export const ENDPOINTS = {
 	COURSES:            					DOMAIN + "getCourseList",
 	SUBJECTS:           					DOMAIN + "getSubjectList",
 	ASSIGN_COURSES_TO_STUDENTS: 	DOMAIN + "assignCoursesToStudents",
+	ASSIGN_SUBJECT_TO_COURSE: 		DOMAIN +"assignSubjectToCourse",
 };
