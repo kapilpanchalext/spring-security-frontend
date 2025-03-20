@@ -69,7 +69,7 @@ const CourseSubjectSelector = () => {
   };
 
   // Handle Drop Event (Assign Course)
-  const dropHandler = async (event: React.DragEvent, coursename: string, courseno: string) => {
+  const dropHandler = async (event: React.DragEvent, courseno: string) => {
     event.preventDefault();
     const subjectno = event.dataTransfer.getData("subjectno");
     const subjectname = event.dataTransfer.getData("subjectname");
@@ -140,7 +140,7 @@ const CourseSubjectSelector = () => {
                 className="border border-gray-400 text-black font-bold m-2 p-6 rounded w-64 text-center"
                 key={index}
                 onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => dropHandler(event, course.coursename, course.courseno)}>
+                onDrop={(event) => dropHandler(event, course.courseno)}>
                   <p>{course.coursename}</p>
 
                 {/* Assigned Courses with Delete Button */}
