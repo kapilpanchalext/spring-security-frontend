@@ -9,35 +9,54 @@ const CourseSubjectSelector = () => {
 
   const studentListHandler = async (event: React.MouseEvent) => {
     event.preventDefault();
-
+  
     try {
-      const url = ENDPOINTS.COURSES;
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      // Fetch Courses (which already contain subjects)
+      const courseResponse = await fetch(ENDPOINTS.COURSES);
+  
+      if (!courseResponse.ok) {
+        throw new Error(`HTTP error! Status: ${courseResponse.status}`);
       }
-
-      const courseData = await response.json();
-      console.dir(courseData);
+  
+      const courseData: CourseModel[] = await courseResponse.json();
       setCourseData(courseData);
-
-      try {
-        const url = ENDPOINTS.SUBJECTS;
-        const response = await fetch(url);
   
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+      // Initialize coursesSubject from fetched courses
+      setCoursesSubject((prev) => {
+        const updatedCourses = { ...prev };
   
-        const subjectData = await response.json();
-        console.dir(subjectData);
-        setSubjectData(subjectData);
-        // return data;
-      } catch (error) {
-        console.error("Error fetching student course subjects: ", error);
+        courseData.forEach((course) => {
+          if (!updatedCourses[course.courseno]) {
+            updatedCourses[course.courseno] = [];
+          }
+  
+          course.subject.forEach((subject) => {
+            const alreadyAssigned = updatedCourses[course.courseno].some(
+              (s) => s.subjectno === subject.subjectno
+            );
+  
+            if (!alreadyAssigned) {
+              updatedCourses[course.courseno] = [
+                ...updatedCourses[course.courseno],
+                { subjectno: subject.subjectno, subjectname: subject.subjectname },
+              ];
+            }
+          });
+        });
+  
+        return updatedCourses;
+      });
+  
+      // Fetch subjects separately (for later assignments)
+      const subjectResponse = await fetch(ENDPOINTS.SUBJECTS);
+  
+      if (!subjectResponse.ok) {
+        throw new Error(`HTTP error! Status: ${subjectResponse.status}`);
       }
-      return subjectData;
+  
+      const subjectData = await subjectResponse.json();
+      setSubjectData(subjectData);
+  
     } catch (error) {
       console.error("Error fetching student course subjects: ", error);
     }
@@ -113,37 +132,6 @@ const CourseSubjectSelector = () => {
     <>
       <h1 className="text-3xl font-bold underline">Spring Data JPA</h1>
       <button onClick={studentListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Course List</button>
-      
-      {/* <div className="flex flex-col max-w-lg mx-auto mt-4">
-        <div className="grid grid-cols-2 gap-10"> */}
-          {/* Student List */}
-          {/* <div className="flex flex-wrap w-full w-1/2">
-            {courseData.map((course, index) => (
-              <div
-                className="border border-gray-400 text-black font-bold m-2 p-6 rounded w-64 text-center"
-                key={index}
-                onDragOver={(event) => event.preventDefault()}
-                onDrop={(event) => dropHandler(event, course.coursename, course.courseno)}>
-                  <p>{course.coursename}</p>
-
-                {/* Assigned Courses with Delete Button */}
-              {/*<div className="mt-2">
-                  {coursesSubject[course.courseno]?.map((subject) => (
-                    <div key={subject.subjectno} className="bg-blue-200 text-black p-2 rounded flex justify-between items-center">
-                      <span>{subject.subjectname}</span>
-                      <button
-                        className="text-black px-2 py-1 rounded ml-2"
-                        onClick={() => removeCourseHandler(course.courseno, subject.subjectno)}>
-                        X
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div> */}
-        {/* </div>
-      </div> */}
       
       <div className="flex flex-col w-full mx-auto mt-4">
         <div className="grid grid-cols-2 gap-10">

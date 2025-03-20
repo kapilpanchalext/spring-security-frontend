@@ -27,7 +27,7 @@ export interface StudentModel {
 export interface CourseModel {
   courseno: string,
 	coursename: string,
-	subject: string,
+	subject: SubjectModel[],
 	courseType: string,
 	location: boolean,
 };
