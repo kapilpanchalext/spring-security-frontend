@@ -36,12 +36,18 @@ export default function Home() {
     router.push('/courseSubjectSelector')
   };
 
+  const magneticEffectHandler = (event: React.MouseEvent) => {
+    event.preventDefault();
+    router.push('/magneticEffect')
+  };
+
   return (
     <>
       <h1 className="text-3xl font-bold underline">Spring Data JPA</h1>
       <button onClick={studentCourseListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Student Course List</button>
       <button onClick={studentListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Student List</button>
       <button onClick={courseListHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Course List</button>
+      <button onClick={magneticEffectHandler} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Magnetic Effect</button>
 
       <div>
         {studentCourseSubjectModel.map((item, index) => (
@@ -52,4 +58,4 @@ export default function Home() {
       </div>
     </>
   );
-}
+};
