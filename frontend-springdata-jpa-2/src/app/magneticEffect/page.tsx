@@ -55,7 +55,7 @@ const MagneticEffect = () => {
             console.log(snappedX, snappedY);
             setSnappedCount((prev) => prev + 1);
 
-            if(magnetHeight < 32) {
+            if(magnetHeight < 32){
               setMagnetHeight((prevHeight) => {
                 if (snappedCount === 0) {
                   return prevHeight * 2;
@@ -135,8 +135,8 @@ const MagneticEffect = () => {
                 top: draggable.snapOffsetY,
                 left: 0,
                 transform: "translateX(-50%)",
-              }}
-            ></div>
+              }}>
+            </div>
           </div>
         ))}
       </div>
